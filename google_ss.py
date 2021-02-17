@@ -21,8 +21,6 @@ class Google_shets ():
         # Set the sheet 1 as worksheet
         self.worksheet = sheet.sheet1
 
-
-
     def write_data (self, data): 
         """ Write list of data in the worksheet"""
         

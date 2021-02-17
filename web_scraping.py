@@ -146,6 +146,13 @@ class Browser ():
             else: 
                 break
 
+    def reload_page (self): 
+        """
+        Reload the current page
+        """
+
+        self.__browser.refresh()
+
     def end_browser (self):
         """
         Close the current instance of chrome

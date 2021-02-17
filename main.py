@@ -3,7 +3,7 @@
 import pprint
 from google_ss import Google_shets
 from web_scraping import Browser
-import pyautogui
+import pyautogui, random, time
 
 
 # Public shred google sheet link with edit permissions
@@ -54,50 +54,89 @@ for row in data_sheet:
     my_browser.send_data (selector_password, password)
     my_browser.click (selector_next_button)
 
-    # Click in accept button | Try to click ot skip
-    selector_accept_button = "#accept"
-    my_browser.wait_to_load_click (selector_accept_button, optional=True)
+    # # Click in accept button | Try to click ot skip
+    # selector_accept_button = "#accept"
+    # my_browser.wait_to_load_click (selector_accept_button, optional=True)
 
-    # Click in "here" link
-    selector_update_details_link = "body > div > root > div:nth-child(2) > error > article > section > p > simple-html > span > a"
-    my_browser.wait_to_load_click (selector_update_details_link)
-
-
-    # BIRTHDAY FORM FILL
+    # # Click in "here" link
+    # selector_update_details_link = "body > div > root > div:nth-child(2) > error > article > section > p > simple-html > span > a"
+    # my_browser.wait_to_load_click (selector_update_details_link)
 
 
-    # Get date
-    date_birth = data_sheet[0]["Date of Birth"]
-    date_month = date_birth[:date_birth.find("/")] 
-    date_day = date_birth[date_birth.find("/")+1:date_birth.rfind("/")]
-    date_year = date_birth[date_birth.rfind("/")+1:]    
+    # # # BIRTHDAY FORM FILL
+
+
+    # # Get date
+    # date_birth = data_sheet[0]["Date of Birth"]
+    # date_month = date_birth[:date_birth.find("/")] 
+    # date_day = date_birth[date_birth.find("/")+1:date_birth.rfind("/")]
+    # date_year = date_birth[date_birth.rfind("/")+1:]    
     
-    # Update switch of tabs | 
-    my_browser.switch_to_tab (0)
-    my_browser.switch_to_tab (1)
+    # # Update switch of tabs | 
+    # my_browser.switch_to_tab (0)
+    # my_browser.switch_to_tab (1)
 
-    # Write month
-    selector_month = "#yDmH0d > c-wiz > div > div:nth-child(3) > c-wiz > div > div.VfPpkd-WsjYwc.VfPpkd-WsjYwc-OWXEXe-INsAgc.KC1dQ.Usd1Ac.AaN0Dd.hTY94b.HYI7Re.S69s8b > form > div.wuxXce.ECutae > div:nth-child(1) > div > div > div.M0zhbf.xYWZbf > div.ohXgge.Czzg8c > div > div > div > div.VfPpkd-TkwUic"
-    my_browser.wait_to_load_click (selector_month)
-    for _ in range (0, int(date_month) + 1): 
-        pyautogui.press ("down")
-    pyautogui.press ("enter")
+    # # Write month
+    # selector_month = "#yDmH0d > c-wiz > div > div:nth-child(3) > c-wiz > div > div.VfPpkd-WsjYwc.VfPpkd-WsjYwc-OWXEXe-INsAgc.KC1dQ.Usd1Ac.AaN0Dd.hTY94b.HYI7Re.S69s8b > form > div.wuxXce.ECutae > div:nth-child(1) > div > div > div.M0zhbf.xYWZbf > div.ohXgge.Czzg8c > div > div > div > div.VfPpkd-TkwUic"
+    # my_browser.wait_to_load_click (selector_month)
+    # for _ in range (0, int(date_month) + 1): 
+    #     pyautogui.press ("down")
+    # pyautogui.press ("enter")
  
-    # Write day 
-    selector_day = "#i7"
-    my_browser.send_data (selector_day, date_day)
+    # # Write day 
+    # selector_day = "#i7"
+    # my_browser.send_data (selector_day, date_day)
 
-    # Write year
-    selector_year = "#i9"
-    my_browser.send_data (selector_year, date_year)
+    # # Write year
+    # selector_year = "#i9"
+    # my_browser.send_data (selector_year, date_year)
 
-    # Save button
-    selector_save_button = "#yDmH0d > c-wiz > div > div:nth-child(3) > c-wiz > div > div.VfPpkd-WsjYwc.VfPpkd-WsjYwc-OWXEXe-INsAgc.KC1dQ.Usd1Ac.AaN0Dd.hTY94b.HYI7Re.S69s8b > form > div.wuxXce.ECutae > div.SjcvKf > div.Atqwuf > div > div > button > div.VfPpkd-RLmnJb"
-    my_browser.click (selector_save_button)
+    # # Save button
+    # selector_save_button = "#yDmH0d > c-wiz > div > div:nth-child(3) > c-wiz > div > div.VfPpkd-WsjYwc.VfPpkd-WsjYwc-OWXEXe-INsAgc.KC1dQ.Usd1Ac.AaN0Dd.hTY94b.HYI7Re.S69s8b > form > div.wuxXce.ECutae > div.SjcvKf > div.Atqwuf > div > div > button > div.VfPpkd-RLmnJb"
+    # my_browser.click (selector_save_button)
 
-    # Confirm button
-    selector_confirm_button = "#yDmH0d > div.VfPpkd-Sx9Kwc.cC1eCc.UDxLd.PzCPDd.VfPpkd-Sx9Kwc-OWXEXe-FNFY6c > div.VfPpkd-wzTsW > div > div.VfPpkd-T0kwCb > button:nth-child(2) > div.VfPpkd-RLmnJb"
-    my_browser.wait_to_load_click (selector_confirm_button)
+    # # Confirm button
+    # selector_confirm_button = "#yDmH0d > div.VfPpkd-Sx9Kwc.cC1eCc.UDxLd.PzCPDd.VfPpkd-Sx9Kwc-OWXEXe-FNFY6c > div.VfPpkd-wzTsW > div > div.VfPpkd-T0kwCb > button:nth-child(2) > div.VfPpkd-RLmnJb"
+    # my_browser.wait_to_load_click (selector_confirm_button)
 
 
-    # UPDATE LAST PAGE
+    # RELOAD LAST PAGE | UPDATE COUNTRY, TIME ZONE AND CURRENCY
+
+
+    # # Go to the last tap an reload it
+    # time.sleep (2)
+    # my_browser.switch_to_tab(0)
+    # my_browser.reload_page()
+
+    # # Country 
+    # selector_country = "body > div:nth-child(8) > root > div:nth-child(2) > admob-signup > section:nth-child(2) > create-adsense-adwords > article > section > div:nth-child(1) > material-dropdown-select > dropdown-button > div"
+    # my_browser.wait_to_load_click (selector_country)
+    # pyautogui.typewrite ("United")
+    # pyautogui.press ("down")
+    # pyautogui.press ("down")
+    # pyautogui.press ("enter")
+
+    # # Time zone
+    # selector_time = "body > div:nth-child(8) > root > div:nth-child(2) > admob-signup > section:nth-child(2) > create-adsense-adwords > article > section > div:nth-child(2) > material-dropdown-select > dropdown-button > div"
+    # my_browser.click (selector_time)
+    # time_zone_random = random.randint (1,21)
+    # for _ in range (0, time_zone_random): 
+    #     pyautogui.press ("down")
+    # pyautogui.press ("enter")
+
+    # # Currency
+    # selector_currency = "body > div:nth-child(8) > root > div:nth-child(2) > admob-signup > section:nth-child(2) > create-adsense-adwords > article > section > div:nth-child(3) > material-dropdown-select > dropdown-button > div"
+    # my_browser.click (selector_currency)
+    # pyautogui.press ("down")
+    # pyautogui.press ("enter")
+
+    # # Accept
+    # selector_accept = "body > div:nth-child(8) > root > div:nth-child(2) > admob-signup > section:nth-child(3) > terms > article > div > material-checkbox"
+    # my_browser.wait_to_load_click (selector_accept)
+
+    # # Create account
+    # selector_create_account = "body > div:nth-child(8) > root > div:nth-child(2) > admob-signup > section > div > material-button > material-ripple"
+    # my_browser.wait_to_load_click (selector_create_account)
+    # # my_browser.wait_to_load_click (selector_create_account)
+    # print (selector_create_account)
+
