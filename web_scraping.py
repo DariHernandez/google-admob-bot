@@ -16,6 +16,7 @@ class Browser ():
         """
 
         # Disable testing mode
+        logging.basicConfig( level=logging.DEBUG, format=' %(asctime)s - %(levelname)s - %(message)s' )
         logging.disable()
 
         # Run a loop to find a functional proxy
@@ -138,8 +139,9 @@ class Browser ():
             try: 
                 elem = self.__browser.find_element_by_css_selector (selector)
                 elem.click()
-            except:
+            except Exception as err:
                 time.sleep (0.5) 
+                logging.debug (err)
                 continue
             else: 
                 break
@@ -150,16 +152,6 @@ class Browser ():
         """
 
         self.__browser.close()
-
-    def reload_browser (self): 
-        """
-        Close the current instance of the web browser and reload in the same page
-        """
-
-        self.end_browser()
-        self.__browser = self.__get_chrome_instance()
-        print ("Reloading page")
-        self.__browser.get (self.__web_page)
 
     def load_page (self, page): 
         """

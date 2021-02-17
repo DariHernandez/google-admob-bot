@@ -3,6 +3,7 @@
 import pprint
 from google_ss import Google_shets
 from web_scraping import Browser
+import pyautogui
 
 
 # Public shred google sheet link with edit permissions
@@ -28,11 +29,12 @@ for row in data_sheet:
     password = row ["Password"]
 
     # Wait time to use proxy
-    input ("\nManual configure your proxy or vpn. Press any key to continue...\n")
+    input ("\nManual configure your proxy or vpn. Press Enter to continue...\n")
 
 
     # LOGIN
     
+
     # Load login page
     login_page = "https://accounts.google.com/signin/v2/identifier?service=admob&passive=1209600&continue=https%3A%2F%2Fapps.admob.com%2F%3F_ga%3D2.15979646.959976446.1613507101-1331192604.1613507101&followup=https%3A%2F%2Fapps.admob.com%2F%3F_ga%3D2.15979646.959976446.1613507101-1331192604.1613507101&flowName=GlifWebSignIn&flowEntry=ServiceLogin"
     my_browser.load_page (login_page)
@@ -60,6 +62,42 @@ for row in data_sheet:
     selector_update_details_link = "body > div > root > div:nth-child(2) > error > article > section > p > simple-html > span > a"
     my_browser.wait_to_load_click (selector_update_details_link)
 
+
     # BIRTHDAY FORM FILL
 
+
+    # Get date
+    date_birth = data_sheet[0]["Date of Birth"]
+    date_month = date_birth[:date_birth.find("/")] 
+    date_day = date_birth[date_birth.find("/")+1:date_birth.rfind("/")]
+    date_year = date_birth[date_birth.rfind("/")+1:]    
     
+    # Update switch of tabs | 
+    my_browser.switch_to_tab (0)
+    my_browser.switch_to_tab (1)
+
+    # Write month
+    selector_month = "#yDmH0d > c-wiz > div > div:nth-child(3) > c-wiz > div > div.VfPpkd-WsjYwc.VfPpkd-WsjYwc-OWXEXe-INsAgc.KC1dQ.Usd1Ac.AaN0Dd.hTY94b.HYI7Re.S69s8b > form > div.wuxXce.ECutae > div:nth-child(1) > div > div > div.M0zhbf.xYWZbf > div.ohXgge.Czzg8c > div > div > div > div.VfPpkd-TkwUic"
+    my_browser.wait_to_load_click (selector_month)
+    for _ in range (0, int(date_month) + 1): 
+        pyautogui.press ("down")
+    pyautogui.press ("enter")
+ 
+    # Write day 
+    selector_day = "#i7"
+    my_browser.send_data (selector_day, date_day)
+
+    # Write year
+    selector_year = "#i9"
+    my_browser.send_data (selector_year, date_year)
+
+    # Save button
+    selector_save_button = "#yDmH0d > c-wiz > div > div:nth-child(3) > c-wiz > div > div.VfPpkd-WsjYwc.VfPpkd-WsjYwc-OWXEXe-INsAgc.KC1dQ.Usd1Ac.AaN0Dd.hTY94b.HYI7Re.S69s8b > form > div.wuxXce.ECutae > div.SjcvKf > div.Atqwuf > div > div > button > div.VfPpkd-RLmnJb"
+    my_browser.click (selector_save_button)
+
+    # Confirm button
+    selector_confirm_button = "#yDmH0d > div.VfPpkd-Sx9Kwc.cC1eCc.UDxLd.PzCPDd.VfPpkd-Sx9Kwc-OWXEXe-FNFY6c > div.VfPpkd-wzTsW > div > div.VfPpkd-T0kwCb > button:nth-child(2) > div.VfPpkd-RLmnJb"
+    my_browser.wait_to_load_click (selector_confirm_button)
+
+
+    # UPDATE LAST PAGE
