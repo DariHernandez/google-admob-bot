@@ -17,7 +17,7 @@ class Browser ():
 
         # Disable testing mode
         logging.basicConfig( level=logging.DEBUG, format=' %(asctime)s - %(levelname)s - %(message)s' )
-        # logging.disable()
+        logging.disable()
 
         # Run a loop to find a functional proxy
         while True:
