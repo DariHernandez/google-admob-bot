@@ -1,0 +1,80 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+	<head> 
+		<script src="script.js"></script> 
+		<link rel="stylesheet" href="style.css" /> 
+		<meta charset="UTF-8" /> 
+		<meta name="viewport"
+			content="width=device-width, initial-scale=1.0" /> 
+		<title>Document</title> 
+	</head> 
+	<body> 
+        <b>Manual configure your Proxy or VPN</b>
+        <b>Your ip information: </b>
+        <br>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <br>
+        <button id="reload">Reload</button>
+        <button id="continue">Continue</button>
+
+
+    <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+    <script>
+        // api url 
+        const api_url = "http://ipinfo.io/json"; 
+
+        // Defining async function 
+        async function getapi(url) { 
+            
+            // Storing response 
+            const response = await fetch(url); 
+            
+            // Storing data in form of JSON 
+            var data = await response.json(); 
+            console.log(data); 
+            if (response) { 
+                write_data (data)
+            }
+                
+        } 
+        // Calling that async function 
+        getapi(api_url); 
+
+        // Function to hide the loader 
+        function write_data(data) { 
+            let counter_div = 0
+            for (var key in data) {
+                counter_div += 1 
+                    // check if the property/key is defined in the object itself, not in parent
+                    if (data.hasOwnProperty(key)) {           
+                        let selector = `div:nth-child(${counter_div})`
+                        let elem = document.querySelector (selector)
+                        // elem.innerHTML = "Hello"
+                        elem.innerHTML = `${key} : ${data[key]}"`
+                    }
+                }
+        } 
+
+        let reload_button = document.querySelector ("#reload")
+        let continue_button = document.querySelector ("#continue")
+
+        reload_button.addEventListener ("click", function(){
+            location.reload()
+        }, false)
+
+        continue_button.addEventListener ("click", function(){
+            window.open("https://accounts.google.com/signin/v2/identifier?service=admob&passive=1209600&continue=https%3A%2F%2Fapps.admob.com%2F%3F_ga%3D2.15979646.959976446.1613507101-1331192604.1613507101&followup=https%3A%2F%2Fapps.admob.com%2F%3F_ga%3D2.15979646.959976446.1613507101-1331192604.1613507101&flowName=GlifWebSignIn&flowEntry=ServiceLogin","_self")
+        }, false)
+
+    </script>
+  </body>
+</html>

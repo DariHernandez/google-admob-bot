@@ -17,7 +17,7 @@ class Browser ():
 
         # Disable testing mode
         logging.basicConfig( level=logging.DEBUG, format=' %(asctime)s - %(levelname)s - %(message)s' )
-        # logging.disable()
+        logging.disable()
 
         # Run a loop to find a functional proxy
         while True:
@@ -118,7 +118,7 @@ class Browser ():
         elem = self.browser.find_element_by_css_selector (selector)
         elem.click()
 
-    def wait_to_load_click (self, selector, optional = False): 
+    def wait_to_load_click (self, selector, optional=False): 
         """
         Wait to load specific instartable element in the page
         """
@@ -134,7 +134,7 @@ class Browser ():
             
             # if elemt is optional and the pages takes to many time to load, skip it
             if loops_ounter == 8 and optional: 
-                break
+                return False
 
             try: 
                 elem = self.browser.find_element_by_css_selector (selector)
@@ -144,7 +144,7 @@ class Browser ():
                 logging.debug (err)
                 continue
             else: 
-                break
+                return True
 
     def reload_page (self): 
         """
