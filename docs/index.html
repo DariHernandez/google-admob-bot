@@ -10,7 +10,9 @@
 	</head> 
 	<body> 
         <b>Manual configure your Proxy or VPN</b>
+        <br>
         <b>Your ip information: </b>
+        <br>
         <br>
         <div></div>
         <div></div>
@@ -29,8 +31,19 @@
 
     <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
     <script>
+
+        
+        
+        
         // api url 
         const api_url = "http://ipinfo.io/json"; 
+        
+        async function update_div (index, key, data) {
+            let selector = `div:nth-child(${index})`
+            console.log (selector)
+            let elem = document.querySelector (selector)
+            elem.innerHTML = `${key} : ${data[key]}"`
+        }
 
         // Defining async function 
         async function getapi(url) { 
@@ -42,7 +55,7 @@
             var data = await response.json(); 
             console.log(data); 
             if (response) { 
-                write_data (data)
+                await write_data (data)
             }
                 
         } 
@@ -50,18 +63,15 @@
         getapi(api_url); 
 
         // Function to hide the loader 
-        function write_data(data) { 
-            let counter_div = 0
+        async function write_data(data) { 
+            let counter_div = 5
             for (var key in data) {
                 counter_div += 1 
-                    // check if the property/key is defined in the object itself, not in parent
-                    if (data.hasOwnProperty(key)) {           
-                        let selector = `div:nth-child(${counter_div})`
-                        let elem = document.querySelector (selector)
-                        // elem.innerHTML = "Hello"
-                        elem.innerHTML = `${key} : ${data[key]}"`
-                    }
+                // check if the property/key is defined in the object itself, not in parent
+                if (data.hasOwnProperty(key)) {           
+                    await update_div (counter_div, key, data)
                 }
+            }
         } 
 
         let reload_button = document.querySelector ("#reload")
