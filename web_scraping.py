@@ -17,7 +17,7 @@ class Browser ():
 
         # Disable testing mode
         logging.basicConfig( level=logging.DEBUG, format=' %(asctime)s - %(levelname)s - %(message)s' )
-        logging.disable()
+        # logging.disable()
 
         # Run a loop to find a functional proxy
         while True:
@@ -173,6 +173,7 @@ class Browser ():
         Switch to iframe inside the main content
         """
 
+        self.swith_to_main_frame()
         frame_id = frame_id.replace ("#","")
         self.browser.switch_to_frame (frame_id)
 

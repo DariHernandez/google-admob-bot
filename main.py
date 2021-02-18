@@ -208,7 +208,7 @@ for row in data_sheet:
     # my_browser.wait_to_load_click (selector_next_button)
 
 
-    # GOOGLE PAY
+    # GOOGLE PAY | Add nee payment
 
     google_pay_page = "https://pay.google.com/gp/w/u/0/home/paymentmethods"
     time.sleep(2)
@@ -221,10 +221,47 @@ for row in data_sheet:
     my_browser.swith_to_frame (frame_id)
     
     # selector_add_pay_button = "body > div > div > div > a"
-    selector_add_pay_button = "body > div > div > div > div > a > div > div"
-    selector_add_pay_button = "#iframeBody > div.b3id-payment-methods.b3-payment-methods > div.b3-page-content.b3-payment-methods-content > div > div.b3-payment-methods-empty-add-instrument > a"
     selector_add_pay_button = "#iframeBody > div.b3id-payment-methods.b3-payment-methods > div.b3-page-content.b3-payment-methods-content > div > div.b3-payment-methods-empty-add-instrument > a > div > div > span"
     my_browser.click(selector_add_pay_button)
+
+
+    # SET PAYMENTS INFO
+
+
+    # Swith to intermal frame
+    frame_id = "mainWidget_:0Iframe"
+    frame_selector = "iframe"
+    time.sleep (2)
+    my_browser.swith_to_frame (frame_id)
+
+    # Select bank
+    selector_add_bank_button = "div[id$='_option3']"
+    my_browser.wait_to_load_click (selector_add_bank_button)
+
+    # Swith to intermal frame
+    frame_id = "mainWidget_:0Iframe"
+    frame_selector = "#mainWidget_:0Iframe"
+    time.sleep (5)
+    my_browser.swith_to_frame (frame_id)
+
+    # Write info
+    selector_bank = "input[name='FIELD_ACCOUNT_HOLDER_NAME']"
+    selector_routing = "input[name='FIELD_BANK_CODE']"
+    selector_account = "input[name='FIELD_ACCOUNT_NUMBER']"
+
+    # loop for save each account in diferent types
+    # for index_count_type in range (1, 4): 
+
+    my_browser.send_data (selector_bank, row["Name on Bank"])
+    my_browser.send_data (selector_routing, row["Routing"])
+    my_browser.send_data (selector_account, row["Account No."])
+
+    selector_next_button = "#saveAddInstrument"
+    my_browser.click (selector_next_button)
+
+
+    # VERIFY BANK ACCOUNT
+
 
 
 
