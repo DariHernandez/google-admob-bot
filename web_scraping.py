@@ -17,7 +17,7 @@ class Browser ():
 
         # Disable testing mode
         logging.basicConfig( level=logging.DEBUG, format=' %(asctime)s - %(levelname)s - %(message)s' )
-        logging.disable()
+        # logging.disable()
 
         # Run a loop to find a functional proxy
         while True:
@@ -33,15 +33,15 @@ class Browser ():
                 # Print information
                 print ("\nLoading ipinfo page: {}...".format(self.__web_page[:40]))
 
-                self.__browser = self.__get_chrome_instance()
-                self.__browser.set_page_load_timeout (15)
+                self.browser = self.__get_chrome_instance()
+                self.browser.set_page_load_timeout (15)
 
                 # Load page
-                self.__browser.get (self.__web_page)
+                self.browser.get (self.__web_page)
 
                 # Verify the correct load of the page
                 try: 
-                    self.__browser.find_element_by_css_selector("#reload-button")
+                    self.browser.find_element_by_css_selector("#reload-button")
                 except: 
                     break
                 else:
@@ -83,12 +83,12 @@ class Browser ():
 
         return browser
 
-    def new_tob (self): 
+    def new_tab (self): 
         """
         Create new empty tab in browser
         """
 
-        self.__browser.execute_script("window.open('');")
+        self.browser.execute_script("window.open('');")
         print ("\t - New empty tab created.")
 
     def switch_to_tab (self, number): 
@@ -96,8 +96,8 @@ class Browser ():
         Switch to specific number of tab
         """
 
-        windows = self.__browser.window_handles
-        self.__browser.switch_to.window(windows[number])
+        windows = self.browser.window_handles
+        self.browser.switch_to.window(windows[number])
         print ("\t - Switched to tab: {}.".format (number))
 
     def send_data (self, selector, data): 
@@ -105,7 +105,7 @@ class Browser ():
         Send data to specific input fill
         """
         print ("\t - sending information to input fill ({}..., {})".format (selector[0:20], data))
-        elem = self.__browser.find_element_by_css_selector (selector)
+        elem = self.browser.find_element_by_css_selector (selector)
 
         # Write data 
         elem.send_keys (data)
@@ -115,7 +115,7 @@ class Browser ():
         Send data to specific input fill
         """
         print ("\t - clicking an element ({}...)".format (selector[0:20]))
-        elem = self.__browser.find_element_by_css_selector (selector)
+        elem = self.browser.find_element_by_css_selector (selector)
         elem.click()
 
     def wait_to_load_click (self, selector, optional = False): 
@@ -137,7 +137,7 @@ class Browser ():
                 break
 
             try: 
-                elem = self.__browser.find_element_by_css_selector (selector)
+                elem = self.browser.find_element_by_css_selector (selector)
                 elem.click()
             except Exception as err:
                 time.sleep (0.5) 
@@ -151,14 +151,14 @@ class Browser ():
         Reload the current page
         """
 
-        self.__browser.refresh()
+        self.browser.refresh()
 
     def end_browser (self):
         """
         Close the current instance of chrome
         """
 
-        self.__browser.close()
+        self.browser.close()
 
     def load_page (self, page): 
         """
@@ -166,7 +166,22 @@ class Browser ():
         """
         print ("Loading page: {}...".format (page[0:40]))
         self.__web_page = page
-        self.__browser.get (self.__web_page)
+        self.browser.get (self.__web_page)
+
+    def swith_to_frame (self, frame_id): 
+        """
+        Switch to iframe inside the main content
+        """
+
+        frame_id = frame_id.replace ("#","")
+        self.browser.switch_to_frame (frame_id)
+
+    def swith_to_main_frame (self): 
+        """
+        Switch to the main contecnt of the page
+        """
+        
+        self.browser.switch_to_default_content()
 
     
 
