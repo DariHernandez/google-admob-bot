@@ -17,18 +17,18 @@ class Web_automation ():
         Constructor of the class
         """
 
-        current_folder = os.path.dirname (__file__)
-        index_file = os.path.join ("file://", current_folder, "index.html")
-
         # Variables of class
         self.headless = headless
         self.row = row 
     
         # instance of classes
-        self.my_browser = Browser (headless=headless, start_page=index_file)
+        self.my_browser = Browser (headless=headless, start_page="https://darihernandez.github.io/google-admob-bot/")
         
         # Wait time to use proxy
         input ("\nManual configure your proxy or vpn.\n")
+
+        # Slector to usr in all all functions
+        self.selector_email = "#identifierId"
     
     
     def login (self): 
@@ -45,10 +45,9 @@ class Web_automation ():
         self.my_browser.load_page (login_page)
 
         # Write user name and continue
-        selector_email = "#identifierId"
         selector_next_button = "#identifierNext > div > button > div.VfPpkd-RLmnJb"
-        self.my_browser.wait_to_load_click (selector_email)
-        self.my_browser.send_data (selector_email, email)
+        self.my_browser.wait_to_load_click (self.selector_email)
+        self.my_browser.send_data (self.selector_email, email)
         self.my_browser.click (selector_next_button)
 
         # Write password and continue
@@ -179,127 +178,137 @@ class Web_automation ():
         selector_next_button = "body > div > root > div:nth-child(2) > email-preferences > section:nth-child(2) > div > material-button > material-ripple"
         self.my_browser.wait_to_load_click (selector_next_button)
 
-    def set_payments_info (self): 
+    def set_payments_info (self, data): 
         """
         Set payments information
         """
 
-        # Loop for each row in sheet
-        for row in self.data_sheet: 
+        # SETUP PAYMENTS
+        selector_payments = "body > div:nth-child(7) > root > div > div > sidebar > div > sidebar-menu > material-list > div:nth-child(4) > sidebar-panel:nth-child(4) > div > sidebar-menu-item > material-list-item > material-ripple"
+        self.my_browser.wait_to_load_click (selector_payments)
 
-            # SETUP PAYMENTS
-            selector_payments = "body > div:nth-child(7) > root > div > div > sidebar > div > sidebar-menu > material-list > div:nth-child(4) > sidebar-panel:nth-child(4) > div > sidebar-menu-item > material-list-item > material-ripple"
-            self.my_browser.wait_to_load_click (selector_payments)
+        selector_setup_payments = "payments > publisher-payments > div > div > payments-card > template-card > div > div > material-button > material-ripple"
+        self.my_browser.wait_to_load_click (selector_setup_payments)
 
-            selector_setup_payments = "payments > publisher-payments > div > div > payments-card > template-card > div > div > material-button > material-ripple"
-            self.my_browser.wait_to_load_click (selector_setup_payments)
+        # Get address from file
+        address = get_ramdom_address()
 
-            # Get address from file
-            address = get_ramdom_address()
+        # Switch inside the frame
+        frame_id = "signup-containerIframe"
+        frame_selector = "#signup-containerIframe"
+        self.my_browser.wait_to_load_click (frame_selector)
+        self.my_browser.swith_to_frame (frame_id)
 
-            # Switch inside the frame
-            frame_id = "signup-containerIframe"
-            frame_selector = "#signup-containerIframe"
+        # Write address
+        selector_street = "input[name='ADDRESS_LINE_1']"
+        selector_city = "input[name='LOCALITY']"
+        selector_state = "div[data-name='ADMIN_AREA']"
+        selector_zip_code = "input[name='POSTAL_CODE']"
+
+        self.my_browser.wait_to_load_click (selector_street)
+        self.my_browser.send_data (selector_street, address["street"])
+        self.my_browser.send_data (selector_city, address["city"])
+        self.my_browser.click (selector_state)
+        pyautogui.typewrite ("n")
+        for _ in range (0, 23): 
+            pyautogui.press ("down")
+        pyautogui.press ("enter")
+        self.my_browser.send_data (selector_zip_code, address["zip_code"])
+
+        # Switch to mian data frame
+        self.my_browser.swith_to_main_frame()
+
+        # Send form
+        selector_next_button = "inventory-app > payments > publisher-payments > div > div > payments-signup > div > material-button"
+        self.my_browser.wait_to_load_click (selector_next_button)
+
+
+        # LOOP FOR ADD EACH TYPE OF ACCOUNT
+        for type_index in range (1, 4): 
+                
+            # GOOGLE PAY | Add new payment
+
+            google_pay_page = "https://pay.google.com/gp/w/u/0/home/paymentmethods"
+            time.sleep(2)
+            self.my_browser.load_page (google_pay_page)
+
+            # Swith to intermal frame
+            frame_id = "mainWidget_:0Iframe"
+            frame_selector = "iframe"
             self.my_browser.wait_to_load_click (frame_selector)
             self.my_browser.swith_to_frame (frame_id)
+            
+            if type_index == 1: 
+                selector_add_pay_button = "#iframeBody > div.b3id-payment-methods.b3-payment-methods > div.b3-page-content.b3-payment-methods-content > div a > div > div > span"
+            else: 
+                selector_add_pay_button = "#iframeBody div.b3-payment-methods-instrument-details-container > a:last-child span"
+            self.my_browser.click(selector_add_pay_button)
 
-            # Write address
-            selector_street = "input[name='ADDRESS_LINE_1']"
-            selector_city = "input[name='LOCALITY']"
-            selector_state = "div[data-name='ADMIN_AREA']"
-            selector_zip_code = "input[name='POSTAL_CODE']"
+            # SET PAYMENTS INFO
 
-            self.my_browser.wait_to_load_click (selector_street)
-            self.my_browser.send_data (selector_street, address["street"])
-            self.my_browser.send_data (selector_city, address["city"])
-            self.my_browser.click (selector_state)
-            pyautogui.typewrite ("n")
-            for _ in range (0, 23): 
+            # Swith to intermal frame
+            frame_id = "mainWidget_:0Iframe"
+            frame_selector = "iframe"
+            time.sleep (2)
+            self.my_browser.swith_to_frame (frame_id)
+
+            # Select bank
+            selector_add_bank_button = "div[id$='_option3']"
+            self.my_browser.wait_to_load_click (selector_add_bank_button)
+
+            # Swith to intermal frame
+            frame_id = "mainWidget_:0Iframe"
+            frame_selector = "#mainWidget_:0Iframe"
+            time.sleep (5)
+            self.my_browser.swith_to_frame (frame_id)
+
+            # Write info
+            selector_bank = "input[name='FIELD_ACCOUNT_HOLDER_NAME']"
+            selector_type = "#\:x8 > div"
+            selector_routing = "input[name='FIELD_BANK_CODE']"
+            selector_account = "input[name='FIELD_ACCOUNT_NUMBER']"
+
+            # loop for save each account in diferent types
+            # for index_count_type in range (1, 4): 
+
+            self.my_browser.send_data (selector_bank, row["Name on Bank"])
+            for _ in range (0, type_index-1):
                 pyautogui.press ("down")
             pyautogui.press ("enter")
-            self.my_browser.send_data (selector_zip_code, address["zip_code"])
+            self.my_browser.send_data (selector_routing, row["Routing"])
+            self.my_browser.send_data (selector_account, row["Account No."])
 
-            # Switch to mian data frame
-            self.my_browser.swith_to_main_frame()
+            selector_next_button = "#saveAddInstrument"
+            self.my_browser.click (selector_next_button)
 
-            # Send form
-            selector_next_button = "inventory-app > payments > publisher-payments > div > div > payments-signup > div > material-button"
-            self.my_browser.wait_to_load_click (selector_next_button)
+            # VERIFY BANK ACCOUNT
 
+            frame_id = "bankAccountVerification"
+            frame_selector = "#bankAccountVerification"
+            time.sleep (5)
+            self.my_browser.swith_to_frame (frame_id)
 
-            # LOOP FOR ADD EACH TYPE OF ACCOUNT
-            for type_index in range (1, 4): 
-                    
-                # GOOGLE PAY | Add new payment
+            selector_verify_test_deposit = "#iframeBody > div > div > div > div > div > div > div:nth-child(3) > div"
+            self.my_browser.click (selector_verify_test_deposit)
 
-                google_pay_page = "https://pay.google.com/gp/w/u/0/home/paymentmethods"
-                time.sleep(2)
-                self.my_browser.load_page (google_pay_page)
+            selector_next_button = "#saveAddInstrument"
+            self.my_browser.click (selector_next_button)
 
-                # Swith to intermal frame
-                frame_id = "mainWidget_:0Iframe"
-                frame_selector = "iframe"
-                self.my_browser.wait_to_load_click (frame_selector)
-                self.my_browser.swith_to_frame (frame_id)
-                
-                if type_index == 1: 
-                    selector_add_pay_button = "#iframeBody > div.b3id-payment-methods.b3-payment-methods > div.b3-page-content.b3-payment-methods-content > div a > div > div > span"
-                else: 
-                    selector_add_pay_button = "#iframeBody div.b3-payment-methods-instrument-details-container > a:last-child span"
-                self.my_browser.click(selector_add_pay_button)
+            selector_next_button = "#cancelAddInstrument"
+            self.my_browser.click (selector_next_button)
 
-                # SET PAYMENTS INFO
+    def auto_run (self): 
+        """
+        Detect an elements in the current screen to auto run the correct function
+        """
 
-                # Swith to intermal frame
-                frame_id = "mainWidget_:0Iframe"
-                frame_selector = "iframe"
-                time.sleep (2)
-                self.my_browser.swith_to_frame (frame_id)
+        # Infinite loop for search elements in the screen
+        while True: 
+            in_login = self.my_browser.wait_to_load_click (self.selector_email, 0.5)
 
-                # Select bank
-                selector_add_bank_button = "div[id$='_option3']"
-                self.my_browser.wait_to_load_click (selector_add_bank_button)
+            if in_login: 
+                self.login()
 
-                # Swith to intermal frame
-                frame_id = "mainWidget_:0Iframe"
-                frame_selector = "#mainWidget_:0Iframe"
-                time.sleep (5)
-                self.my_browser.swith_to_frame (frame_id)
-
-                # Write info
-                selector_bank = "input[name='FIELD_ACCOUNT_HOLDER_NAME']"
-                selector_type = "#\:x8 > div"
-                selector_routing = "input[name='FIELD_BANK_CODE']"
-                selector_account = "input[name='FIELD_ACCOUNT_NUMBER']"
-
-                # loop for save each account in diferent types
-                # for index_count_type in range (1, 4): 
-
-                self.my_browser.send_data (selector_bank, row["Name on Bank"])
-                for _ in range (0, type_index-1):
-                    pyautogui.press ("down")
-                pyautogui.press ("enter")
-                self.my_browser.send_data (selector_routing, row["Routing"])
-                self.my_browser.send_data (selector_account, row["Account No."])
-
-                selector_next_button = "#saveAddInstrument"
-                self.my_browser.click (selector_next_button)
-
-                # VERIFY BANK ACCOUNT
-
-                frame_id = "bankAccountVerification"
-                frame_selector = "#bankAccountVerification"
-                time.sleep (5)
-                self.my_browser.swith_to_frame (frame_id)
-
-                selector_verify_test_deposit = "#iframeBody > div > div > div > div > div > div > div:nth-child(3) > div"
-                self.my_browser.click (selector_verify_test_deposit)
-
-                selector_next_button = "#saveAddInstrument"
-                self.my_browser.click (selector_next_button)
-
-                selector_next_button = "#cancelAddInstrument"
-                self.my_browser.click (selector_next_button)
 
 # Run or nor the browser in background
 headless = False
@@ -313,7 +322,8 @@ data_sheet = my_google_sheets.get_data()
 
 # Loop for each user in google sheet
 for row in data_sheet:   
-    # my_web_automation = Web_automation(headless, row)
-    # my_web_automation.login()
-
+    my_web_automation = Web_automation(headless, row)
+    my_web_automation.auto_run()
+    
+    
     var_input = input ("End row")

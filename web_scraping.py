@@ -118,7 +118,7 @@ class Browser ():
         elem = self.browser.find_element_by_css_selector (selector)
         elem.click()
 
-    def wait_to_load_click (self, selector, optional=False): 
+    def wait_to_load_click (self, selector, timeout=None): 
         """
         Wait to load specific instartable element in the page
         """
@@ -133,7 +133,7 @@ class Browser ():
             loops_ounter += 1
             
             # if elemt is optional and the pages takes to many time to load, skip it
-            if loops_ounter == 8 and optional: 
+            if timeout*2 == loops_ounter: 
                 return False
 
             try: 
